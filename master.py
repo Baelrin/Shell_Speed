@@ -2,40 +2,20 @@ import turtle
 import time
 import random
 
-WIDTH, HEIGHT = 700, 600
-COLORS = [
-    "red",
-    "green",
-    "blue",
-    "orange",
-    "yellow",
-    "black",
-    "purple",
-    "pink",
-    "brown",
-    "cyan",
-]
-
 
 def get_number_of_racers():
-    racers = 0
     while True:
-        racers = input("Enter the number of racers (2 - 10): ")
-        if racers.isdigit():
-            racers = int(racers)
-        else:
-            print("Input is not numeric... Try Again!")
-            continue
-
-        if 2 <= racers <= 10:
-            return racers
-        else:
-            print("Number not in range 2-10. Try Again!")
+        try:
+            racers = int(input("Enter the number of racers (2 - 10): "))
+            if 2 <= racers <= 10:
+                return racers
+            else:
+                print("Number not in range 2-10. Try Again!")
+        except ValueError:
+            print("Input is not a number. Try Again!")
 
 
-def race(colors):
-    turtles = create_turtles(colors)
-
+def race(colors, turtles):
     while True:
         for racer in turtles:
             distance = random.randrange(1, 20)
@@ -58,22 +38,40 @@ def create_turtles(colors):
         racer.setpos(-WIDTH // 2 + (i + 1) * spacingx, -HEIGHT // 2 + 20)
         racer.pendown()
         turtles.append(racer)
-
     return turtles
 
 
 def init_turtle():
+    global WIDTH, HEIGHT, COLORS  # Используем глобальные переменные внутри функции
+    WIDTH, HEIGHT = 700, 600
+    COLORS = [
+        "red",
+        "green",
+        "blue",
+        "orange",
+        "yellow",
+        "black",
+        "purple",
+        "pink",
+        "brown",
+        "cyan",
+    ]
     screen = turtle.Screen()
     screen.setup(WIDTH, HEIGHT)
     screen.title("Shell_Speed")
+    screen.bgcolor("white")  # Устанавливаем фоновый цвет
 
 
-racers = get_number_of_racers()
-init_turtle()
+try:
+    racers = get_number_of_racers()
+    init_turtle()
 
-random.shuffle(COLORS)
-colors = COLORS[:racers]
+    random.shuffle(COLORS)
+    colors = COLORS[:racers]
 
-winner = race(colors)
-print("The winner is the turtle with color:", winner)
-time.sleep(5)
+    turtles = create_turtles(colors)
+    winner = race(colors, turtles)
+    print("The winner is the turtle with color:", winner)
+    time.sleep(5)
+except Exception as e:
+    print("An error occurred:", e)
