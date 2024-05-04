@@ -3,6 +3,21 @@ import time
 import random
 
 
+WIDTH, HEIGHT = 700, 600
+COLORS = [
+    "red",
+    "green",
+    "blue",
+    "orange",
+    "yellow",
+    "black",
+    "purple",
+    "pink",
+    "brown",
+    "cyan",
+]
+
+
 def get_number_of_racers():
     while True:
         try:
@@ -31,50 +46,38 @@ def race(colors, turtles):
     return winner_color
 
 
-def create_turtles(colors):
+def create_turtles():
     turtles = []
-    spacingx = WIDTH // (len(colors) + 1)
-    for i, color in enumerate(colors):
+    spacingx = WIDTH // (len(COLORS) + 1)
+    for i, color in enumerate(COLORS):
         racer = turtle.Turtle()
         racer.color(color)
         racer.shape("turtle")
         racer.left(90)
         racer.penup()
-        racer.setpos(-WIDTH // 2 + (i + 1) * spacingx, -HEIGHT // 2 + 20)
+        x_pos = -WIDTH // 2 + (i + 1) * spacingx
+        y_pos = -HEIGHT // 2 + 20
+        racer.setpos(x_pos, y_pos)
         racer.pendown()
         turtles.append(racer)
     return turtles
 
 
-def init_turtle():
-    global WIDTH, HEIGHT, COLORS  # Используем глобальные переменные внутри функции
-    WIDTH, HEIGHT = 700, 600
-    COLORS = [
-        "red",
-        "green",
-        "blue",
-        "orange",
-        "yellow",
-        "black",
-        "purple",
-        "pink",
-        "brown",
-        "cyan",
-    ]
+def init_game_environment():
     screen = turtle.Screen()
     screen.setup(WIDTH, HEIGHT)
     screen.title("Shell_Speed")
-    screen.bgcolor("white")  # Устанавливаем фоновый цвет
+    screen.bgcolor("white")
 
 
 try:
     racers = get_number_of_racers()
-    init_turtle()
+    init_game_environment()
 
     random.shuffle(COLORS)
     colors = COLORS[:racers]
 
-    turtles = create_turtles(colors)
+    turtles = create_turtles()
     winner = race(colors, turtles)
     print("The winner is the turtle with color:", winner)
     time.sleep(5)
